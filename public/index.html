@@ -1,0 +1,91 @@
+<html>
+<head>
+    <title>RS232 HTTP Relay</title>
+    <style>
+        #term .local {
+        }
+
+        #term .remote {
+        }
+    </style>
+    <script type="text/javascript">
+        function appendTerm(value) {
+            var list = document.getElementById('term').innerHTML;
+            list += value;
+            document.getElementById('term').innerHTML = list;
+        }
+
+        function appendTermLocalValue(value) {
+            appendTerm('<span class="local">' + value + '</span>');
+        }
+
+        function appendTermError(err) {
+            console.error(err);
+            appendTerm('<span class="error">' + err + '</span>');
+        }
+
+        function postData(value) {
+            return new Promise(function(resolve, reject) {
+                var xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+                        if (xmlhttp.status == 200) {
+                            return resolve(xmlhttp.responseText);
+                        }
+                        return reject(new Error('send failed: ' + xmlhttp.status + ': ' + xmlhttp.responseText));
+                    }
+                };
+
+                xmlhttp.open("POST", "/send", true);
+                xmlhttp.setRequestHeader("Content-Type", "application/json");
+                xmlhttp.send(JSON.stringify({
+                    value: value
+                }));
+            });
+        }
+
+        function send() {
+            try {
+                var cr = document.getElementById('cr').checked;
+                var lf = document.getElementById('lf').checked;
+                document.getElementById('send-button').disabled = true;
+                var value = document.getElementById('prompt').value;
+                if (cr) {
+                    value += '\r';
+                }
+                if (lf) {
+                    value += '\n';
+                }
+
+                postData(value)
+                    .then(function() {
+                        appendTermLocalValue(value);
+                        document.getElementById('prompt').value = '';
+                        document.getElementById('send-button').disabled = false;
+                    })
+                    .catch(function(err) {
+                        appendTermError(err);
+                        document.getElementById('send-button').disabled = false;
+                    });
+            } catch (err) {
+                console.error('send failed', err);
+            }
+            return false;
+        }
+    </script>
+</head>
+<pre id="term"></pre>
+<form>
+    <label>
+        <input type="checkbox" checked id="cr"> CR
+    </label>
+    <label>
+        <input type="checkbox" checked id="lf"> LF
+    </label>
+    <label>
+        <input id="prompt"/>
+        <button id="send-button" onclick="return send()">Send</button>
+    </label>
+</form>
+</html>

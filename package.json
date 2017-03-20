@@ -1,0 +1,19 @@
+{
+  "name": "node-pi-rs232",
+  "version": "1.0.0",
+  "description": "Node RaspberryPi HTTP to RS-232 interface",
+  "main": "index.js",
+  "keywords": [
+    "raspberry",
+    "pi",
+    "rs232"
+  ],
+  "author": "Joe Ferner <joe@fernsroth.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "bunyan": "^1.8.8",
+    "express": "^4.15.2",
+    "serialport": "^4.0.7"
+  }
+}
