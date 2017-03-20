@@ -40,7 +40,9 @@
                 xmlhttp.open("POST", "/send", true);
                 xmlhttp.setRequestHeader("Content-Type", "application/json");
                 xmlhttp.send(JSON.stringify({
-                    value: value
+                    value: value,
+                    waitForResponse: true,
+                    timeout: 10000
                 }));
             });
         }
