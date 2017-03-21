@@ -19,6 +19,10 @@
             appendTerm('<span class="local">' + value + '</span>');
         }
 
+        function appendTermRemoteValue(value) {
+            appendTerm('<span class="remote">' + value + '</span>');
+        }
+
         function appendTermError(err) {
             console.error(err);
             appendTerm('<span class="error">' + err + '</span>');
@@ -31,7 +35,7 @@
                 xmlhttp.onreadystatechange = function() {
                     if (xmlhttp.readyState == XMLHttpRequest.DONE) {
                         if (xmlhttp.status == 200) {
-                            return resolve(xmlhttp.responseText);
+                            return resolve(JSON.parse(xmlhttp.responseText));
                         }
                         return reject(new Error('send failed: ' + xmlhttp.status + ': ' + xmlhttp.responseText));
                     }
@@ -61,10 +65,13 @@
                 }
 
                 postData(value)
-                    .then(function() {
+                    .then(function(results) {
                         appendTermLocalValue(value);
                         document.getElementById('prompt').value = '';
                         document.getElementById('send-button').disabled = false;
+                        results.forEach(function(line) {
+                            appendTermRemoteValue(line);
+                        });
                     })
                     .catch(function(err) {
                         appendTermError(err);

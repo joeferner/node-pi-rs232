@@ -4,6 +4,14 @@ const SerialPort = require('serialport');
 const bunyan = require('bunyan');
 
 const port = process.env.PORT || 8080;
+const serialDev = process.env.SERIAL_DEV;
+const serialPortOpenOptions = {
+    baudRate: parseInt(process.env.BAUD_RATE || 9600),
+    dataBits: parseInt(process.env.DATA_BITS || 8),
+    stopBits: parseInt(process.env.STOP_BITS || 1),
+    parity: process.env.PARITY || 'none',
+    parser: SerialPort.parsers.readline('\r')
+};
 const LOGGER = createLogger();
 const receiveQueue = [];
 
@@ -82,9 +90,19 @@ function findSerialPort() {
             if (err) {
                 return reject(err);
             }
+            if (serialDev) {
+                LOGGER.debug(`finding serial port ${serialDev}`);
+                for (let i = 0; i < ports.length; i++) {
+                    if (ports[i].comName === serialDev) {
+                        return resolve(ports[i]);
+                    }
+                }
+                return reject(new Error(`Could not find serial port: ${serialDev}`));
+            }
             if (ports.length === 0) {
                 return reject(new Error('Could not find valid serial ports'));
             }
+            LOGGER.debug(`SERIAL_DEV not specified. using first found port`);
             return resolve(ports[0]);
         });
     });
@@ -93,14 +111,14 @@ function findSerialPort() {
 function openSerialPort(portInfo) {
     return new Promise((resolve, reject) => {
         LOGGER.info(`opening serial port ${portInfo.comName}`);
-        const serialPort = new SerialPort(portInfo.comName);
+        const serialPort = new SerialPort(portInfo.comName, serialPortOpenOptions);
         serialPort.on('open', () => {
             LOGGER.info('port opened');
             resolve(serialPort);
         });
-        serialPort.on('data', (data) => {
-            LOGGER.info(`recv: ${data}`);
-            receiveQueue.push(data);
+        serialPort.on('data', (line) => {
+            LOGGER.info(`recv: ${line}`);
+            receiveQueue.push(line);
         });
     });
 }
