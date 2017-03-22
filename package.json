@@ -1,7 +1,7 @@
 {
-  "name": "node-pi-rs232",
+  "name": "pi-rs232",
   "version": "1.0.0",
-  "description": "Node RaspberryPi HTTP to RS-232 interface",
+  "description": "RaspberryPi HTTP to RS-232 interface",
   "main": "index.js",
   "keywords": [
     "raspberry",

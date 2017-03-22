@@ -1,3 +1,10 @@
+## Description
+
+HTTP REST interface for a USB to RS232 serial adapter. This is useful for controlling devices such as an Epson
+projector over the network.
+
+## Setup
+
 1. Enable SSH and boot to CLI
 1. Upgrade Firmware
 
