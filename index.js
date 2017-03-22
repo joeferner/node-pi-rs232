@@ -71,6 +71,7 @@ function startWebServer(serialPort) {
                     res.send(response);
                 })
                 .catch(err => {
+                    LOGGER.error(`faild to send ${value}`, err);
                     return next(err);
                 });
         });

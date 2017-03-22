@@ -8,7 +8,15 @@
 
     sudo apt-get update
     sudo apt-get upgrade
+    sudo apt-get autoremove
     sudo reboot
+
+1. Turn off rsyslog xconsole output `sudo vi /etc/rsyslog.conf` comment out
+
+    daemon.*;mail.*;\
+        news.err;\
+        *.=debug;*.=info;\
+        *.=notice;*.=warn   |/dev/xconsole
 
 1. Install node.js
 
@@ -32,3 +40,5 @@
     rsync --links -ur --exclude node_modules * pi@192.168.0.161:/opt/node-pi-rs232
     ssh pi@192.168.0.161
     npm install
+
+1. Autostart, add `/opt/node-pi-rs232/run.sh > /dev/null 2>&1 &` to `/etc/rc.local`
