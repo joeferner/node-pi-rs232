@@ -13,6 +13,7 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "bunyan": "^1.8.8",
+    "bunyan-logstash": "^0.3.4",
     "express": "^4.15.2",
     "forever": "^0.15.3",
     "serialport": "^4.0.7"

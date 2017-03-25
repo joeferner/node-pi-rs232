@@ -4,6 +4,8 @@ export NODE_ENV=production
 export SERIAL_DEV=/dev/ttyUSB0
 export PORT=8080
 export BAUD_RATE=9600
+export LOG_FILE=/var/log/node-pi-rs232/node-pi-rs232.log
+export LOGSTASH_HOST=linux01
 
 cd /opt/node-pi-rs232
 echo "running" > /var/log/node-pi-rs232/node-pi-rs232.log

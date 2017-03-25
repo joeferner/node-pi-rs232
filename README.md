@@ -46,6 +46,7 @@ projector over the network.
 
        rsync --links -ur --exclude node_modules * pi@192.168.0.161:/opt/node-pi-rs232
        ssh pi@192.168.0.161
+       cd /opt/node-pi-rs232/
        npm install
 
 1. Autostart, add `/opt/node-pi-rs232/run.sh > /dev/null 2>&1 &` to `/etc/rc.local`

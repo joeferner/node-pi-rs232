@@ -125,19 +125,31 @@ function openSerialPort(portInfo) {
 }
 
 function createLogger() {
-    return bunyan.createLogger({
+    let options = {
         name: 'node-pi-rs232',
         level: 'debug',
         streams: [
             {
                 stream: process.stdout
-            },
-            {
-                type: 'file',
-                path: '/var/log/node-pi-rs232/node-pi-rs232.log'
             }
         ]
-    });
+    };
+    if (process.env.LOG_FILE) {
+        options.streams.push({
+            type: 'file',
+            path: process.env.LOG_FILE
+        });
+    }
+    if (process.env.LOGSTASH_HOST) {
+        options.streams.push({
+            type: "raw",
+            stream: require('bunyan-logstash').createStream({
+                host: process.env.LOGSTASH_HOST,
+                port: process.env.LOGSTASH_PORT || 5505
+            })
+        });
+    }
+    return bunyan.createLogger(options);
 }
 
 run()
