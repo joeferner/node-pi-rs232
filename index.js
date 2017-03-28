@@ -35,9 +35,10 @@ function writeToSerialPort(serialPort, value, options) {
         }
         let timeout;
         if (options.timeout) {
+            LOGGER.debug(`setting timeout to ${options.timeout}ms`);
             setTimeout(() => {
                 clearInterval(interval);
-                reject(new Error('Timeout waiting for response'));
+                reject(new Error(`Timeout ${options.timeout}ms waiting for response`));
             }, options.timeout);
         }
         const interval = setInterval(() => {
