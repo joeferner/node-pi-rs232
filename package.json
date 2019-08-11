@@ -1,6 +1,7 @@
 {
   "name": "pi-rs232",
   "version": "1.0.0",
+  "private": true,
   "description": "RaspberryPi HTTP to RS-232 interface",
   "main": "index.js",
   "keywords": [
@@ -11,11 +12,12 @@
   "author": "Joe Ferner <joe@fernsroth.com>",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.17.1",
-    "bunyan": "^1.8.8",
+    "@serialport/parser-readline": "^2.0.2",
+    "body-parser": "^1.19.0",
+    "bunyan": "^1.8.12",
     "bunyan-logstash": "^0.3.4",
-    "express": "^4.15.2",
-    "forever": "^0.15.3",
-    "serialport": "^4.0.7"
+    "express": "^4.17.1",
+    "forever": "^1.0.0",
+    "serialport": "^7.1.5"
   }
 }

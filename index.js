@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const SerialPort = require('serialport');
 const bunyan = require('bunyan');
+const Readline = require('@serialport/parser-readline');
 
 const port = process.env.PORT || 8080;
 const serialDev = process.env.SERIAL_DEV;
@@ -9,8 +10,7 @@ const serialPortOpenOptions = {
     baudRate: parseInt(process.env.BAUD_RATE || 9600),
     dataBits: parseInt(process.env.DATA_BITS || 8),
     stopBits: parseInt(process.env.STOP_BITS || 1),
-    parity: process.env.PARITY || 'none',
-    parser: SerialPort.parsers.readline('\r')
+    parity: process.env.PARITY || 'none'
 };
 const LOGGER = createLogger();
 const receiveQueue = [];
@@ -114,11 +114,12 @@ function openSerialPort(portInfo) {
     return new Promise((resolve, reject) => {
         LOGGER.info(`opening serial port ${portInfo.comName}`);
         const serialPort = new SerialPort(portInfo.comName, serialPortOpenOptions);
+        const parser = serialPort.pipe(new Readline({ delimiter: '\r' }));
         serialPort.on('open', () => {
             LOGGER.info('port opened');
             resolve(serialPort);
         });
-        serialPort.on('data', (line) => {
+        parser.on('data', (line) => {
             LOGGER.info(`recv: ${line}`);
             receiveQueue.push(line);
         });
