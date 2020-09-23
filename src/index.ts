@@ -143,7 +143,7 @@ function createLogger() {
             type: 'raw',
             stream: bunyanLogstash.createStream({
                 host: process.env.LOGSTASH_HOST,
-                port: process.env.LOGSTASH_PORT || 5505,
+                port: parseInt(process.env.LOGSTASH_PORT || '5505'),
             }),
         });
     }

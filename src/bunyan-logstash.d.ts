@@ -1,1 +1,3 @@
-declare module 'bunyan-logstash' {}
+declare module 'bunyan-logstash' {
+    function createStream(options: { host: string; port: number });
+}
