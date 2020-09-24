@@ -11,7 +11,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint --fix --ext .ts .",
     "lint-staged": "lint-staged",
-    "pre-commit": "npm run format && npm run lint-staged"
+    "pre-commit": "npm run format && npm run lint-staged && npm run build"
   },
   "keywords": [
     "raspberry",
